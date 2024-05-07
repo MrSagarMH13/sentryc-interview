@@ -60,25 +60,19 @@ public class SellerQueryResolver implements GraphQLQueryResolver {
         // Group sellers by sellerInfo id
         Map<UUID, List<Sellers>> sellersGroupedBySellerInfoId = sellers.stream()
                 .filter(seller -> seller.getSellerInfo() != null)
-                .collect(Collectors.groupingBy(seller -> seller.getSellerInfo().getId()));
-
+                .collect(Collectors.groupingBy(seller -> seller.getSellerInfo().getId(), LinkedHashMap::new, Collectors.toList()));
         return sellersGroupedBySellerInfoId.values().stream()
                 .map(sellersList -> {
                     SellerResponseDTO dto = new SellerResponseDTO();
-
                     // All sellers in current group have same sellerInfo. So, fetch details from first seller
                     Sellers firstSeller = sellersList.get(0);
-
                     dto.setSellerName(firstSeller.getSellerName());
                     dto.setExternalId(firstSeller.getExternalId());
                     dto.setMarketplaceId(UUID.fromString(firstSeller.getMarketplaceId()));
-
                     List<ProducerSellerState> producerSellerStates = sellersList.stream()
                             .map(seller -> new ProducerSellerState(seller.getProducerId(), seller.getProducerName(), seller.getState(), seller.getId()))
                             .collect(Collectors.toList());
-
                     dto.setProducerSellerStates(producerSellerStates);
-
                     return dto;
                 })
                 .toList();
