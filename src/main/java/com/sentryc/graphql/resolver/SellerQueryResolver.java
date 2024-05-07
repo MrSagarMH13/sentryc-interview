@@ -31,9 +31,10 @@ public class SellerQueryResolver implements GraphQLQueryResolver {
         Sort sort = switch (sortBy) {
             case NAME_ASC -> Sort.by("sellerInfo.name").ascending();
             case NAME_DESC -> Sort.by("sellerInfo.name").descending();
-            // Include other cases for different sorting options
-            // If you have other fields in SellerSortBy enum, map them to the corresponding fields in the Sellers entity
-            default -> Sort.unsorted();
+            case SELLER_INFO_EXTERNAL_ID_ASC -> Sort.by("sellerInfo.externalId").ascending();
+            case SELLER_INFO_EXTERNAL_ID_DESC -> Sort.by("sellerInfo.externalId").descending();
+            case MARKETPLACE_ID_ASC -> Sort.by("sellerInfo.marketplace.id").ascending();
+            case MARKETPLACE_ID_DESC -> Sort.by("sellerInfo.marketplace.id").descending();
         };
 
         Pageable pageable = PageRequest.of(pageInput.getPage(), pageInput.getSize(), sort);
