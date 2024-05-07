@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: sentryc-interview
+
+  graphql:
+    graphiql:
+      enabled: true
+
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://localhost:5432/
+    username: postgres
+    password: root
+  jpa:
+    show-sql: true
+server:
+  port: 8080
